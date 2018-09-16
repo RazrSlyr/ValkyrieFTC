@@ -17,6 +17,7 @@ public class Auto extends LinearOpMode {
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setPower(0.5);
         while (motor.isBusy());
+        // sets the power to 0
         motor.setPower(0);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
