@@ -8,31 +8,24 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class TeleOp extends OpMode {
 
-    DcMotor leftFront;
-    DcMotor leftBack;
-    DcMotor rightBack;
-    DcMotor rightFront;
+    Robot robot = new Robot();
 
 
 
     public void init()
     {
-        leftBack = hardwareMap.dcMotor.get("leftBack");
-        leftFront = hardwareMap.dcMotor.get("leftFront");
-        rightBack = hardwareMap.dcMotor.get("rightBack");
-        rightFront = hardwareMap.dcMotor.get("rightFront");
-
+        robot.initialize(this);
     }
 
     public void loop()
     {
         double ly = -gamepad1.left_stick_y;
         double ry = -gamepad1.right_stick_y;
-        leftBack.setPower(ly);
-        leftFront.setPower(ly);
+        robot.leftBack.setPower(ly);
+        robot.leftFront.setPower(ly);
 
-        rightBack.setPower(ry);
-        rightFront.setPower(ry);
+        robot.rightBack.setPower(ry);
+        robot.rightFront.setPower(ry);
 
 
     }
