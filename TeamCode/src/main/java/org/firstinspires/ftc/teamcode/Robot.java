@@ -23,6 +23,7 @@ public class Robot {
     private double  CIRCUMFERENCE = 6.0 * Math.PI;
 
     public DcMotor leftBack;
+
     public DcMotor leftFront;
     public DcMotor rightBack;
     public DcMotor rightFront;
@@ -53,6 +54,37 @@ public class Robot {
         intakeArm = opMode.hardwareMap.dcMotor.get("intakeArm");
 
         climber = opMode.hardwareMap.dcMotor.get("climber");
+    }
+
+    public void encoderMove(double inches)
+    {
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        double target = inches / CIRCUMFERENCE * NUM_TICKS;
+        leftFront.setTargetPosition((int)target);
+        leftBack.setTargetPosition((int)target);
+        rightFront.setTargetPosition((int)target);
+        rightBack.setTargetPosition((int)target);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftBack.setPower(.25);
+        leftFront.setPower(.25);
+        rightBack.setPower(.25);
+        rightFront.setPower(.25);
+
+        while(leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy());
+
+        leftBack.setPower(0);
+        leftFront.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
     }
 
 
