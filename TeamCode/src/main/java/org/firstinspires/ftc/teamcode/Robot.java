@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -31,6 +32,8 @@ public class Robot {
     public Servo silverGate;
     public Servo goldGate;
 
+    public Servo test;
+
     public ColorSensor cSensor;
 
     public DcMotor intakeArm;
@@ -56,18 +59,18 @@ public class Robot {
         climber = opMode.hardwareMap.dcMotor.get("climber");
     }
 
-    public void encoderMove(double inches)
-    {
+    public void encoderMove(double inches, LinearOpMode opMode) {
         leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        double target = inches / CIRCUMFERENCE * NUM_TICKS;
-        leftFront.setTargetPosition((int)target);
-        leftBack.setTargetPosition((int)target);
-        rightFront.setTargetPosition((int)target);
-        rightBack.setTargetPosition((int)target);
+        double target = (inches / CIRCUMFERENCE) * NUM_TICKS;
+
+        leftFront.setTargetPosition((int) target);
+        leftBack.setTargetPosition((int) target);
+        rightFront.setTargetPosition((int) target);
+        rightBack.setTargetPosition((int) target);
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -79,7 +82,7 @@ public class Robot {
         rightBack.setPower(.25);
         rightFront.setPower(.25);
 
-        while(leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy());
+        while ((leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy()) && opMode.opModeIsActive());
 
         leftBack.setPower(0);
         leftFront.setPower(0);
@@ -91,7 +94,6 @@ public class Robot {
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-
 
 
 

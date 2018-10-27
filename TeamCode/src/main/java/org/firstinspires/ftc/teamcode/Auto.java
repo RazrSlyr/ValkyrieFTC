@@ -7,16 +7,19 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 public class Auto extends LinearOpMode {
 
     Robot robot = new Robot();
-
-
-    public void runOpMode()
-    {
+    public void runOpMode() {
+        //initialization
         robot.initialize(this);
         waitForStart();
-        while (opModeIsActive())
-        {
-
+        //movement
+        while (opModeIsActive()) {
+            //release hook
+            robot.encoderMove(10, this);
+            //drop our marker
+            //park in the safe zone
+            stop();
         }
+
     }
 
 }
