@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Robot {
@@ -40,6 +41,8 @@ public class Robot {
 
     public DcMotor climber;
 
+    public GyroSensor gyro;
+
 
     public void initialize(OpMode opMode)
     {
@@ -57,6 +60,8 @@ public class Robot {
         intakeArm = opMode.hardwareMap.dcMotor.get("intakeArm");
 
         climber = opMode.hardwareMap.dcMotor.get("climber");
+
+        gyro = opMode.hardwareMap.gyroSensor.get("gyro");
     }
 
     public void encoderMove(double inches, LinearOpMode opMode) {
@@ -93,6 +98,31 @@ public class Robot {
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void gyroTurn(int degrees) {
+        degrees = degrees % 360;
+        gyro.calibrate();
+        //waits for gyro to finish calibrating
+        while (gyro.isCalibrating());
+        if(degrees <= 180) {
+            while (gyro.getHeading() < degrees + 2 && gyro.getHeading() > degrees - 2) {
+                leftFront.setPower(0.25);
+                leftBack.setPower(0.25);
+
+                rightFront.setPower(-0.25);
+                rightBack.setPower(-0.25);
+            }
+        } else {
+            while (gyro.getHeading() < degrees + 2 && gyro.getHeading() > degrees - 2) {
+                leftFront.setPower(-0.25);
+                leftBack.setPower(-0.25);
+
+                rightFront.setPower(0.25);
+                rightBack.setPower(0.25);
+            }
+        }
+
     }
 
 
