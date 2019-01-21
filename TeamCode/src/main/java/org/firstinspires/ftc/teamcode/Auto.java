@@ -13,11 +13,7 @@ public class Auto extends LinearOpMode {
         waitForStart();
         //movement
         while (opModeIsActive()) {
-            //release hook
-            robot.encoderMove(10, this);
-            //drop our marker
-            //park in the safe zone
-            stop();
+
         }
 
     }

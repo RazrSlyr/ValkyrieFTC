@@ -27,10 +27,9 @@ public class Robot {
     private double NUM_TICKS = 500;
     private double CIRCUMFERENCE = 6.0 * Math.PI;
 
-    public DcMotor leftBack;
-    public DcMotor leftFront;
-    public DcMotor rightBack;
-    public DcMotor rightFront;
+    public DcMotor left;
+    public DcMotor right;
+
 
     public ColorSensor cSensor;
 
@@ -46,10 +45,9 @@ public class Robot {
 
 
     public void initialize(OpMode opMode) {
-        leftBack = opMode.hardwareMap.dcMotor.get("leftBack");
-        leftFront = opMode.hardwareMap.dcMotor.get("leftFront");
-        rightBack = opMode.hardwareMap.dcMotor.get("rightBack");
-        rightFront = opMode.hardwareMap.dcMotor.get("rightFront");
+        left = opMode.hardwareMap.dcMotor.get("left");
+        right = opMode.hardwareMap.dcMotor.get("right");
+
 
         cSensor = opMode.hardwareMap.colorSensor.get("cSensor");
 
@@ -65,40 +63,27 @@ public class Robot {
     }
 
     public void encoderDrive(double inches, LinearOpMode opMode) {
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         double target = (inches / CIRCUMFERENCE) * NUM_TICKS;
 
-        leftFront.setTargetPosition((int) target);
-        leftBack.setTargetPosition((int) target);
-        rightFront.setTargetPosition((int) target);
-        rightBack.setTargetPosition((int) target);
+        right.setTargetPosition((int) target);
+        left.setTargetPosition((int) target);
 
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftBack.setPower(.25);
-        leftFront.setPower(.25);
-        rightBack.setPower(.25);
-        rightFront.setPower(.25);
+        left.setPower(.25);
+        right.setPower(.25);
 
-        while ((leftFront.isBusy() || leftBack.isBusy() || rightBack.isBusy() || rightFront.isBusy()) && opMode.opModeIsActive())
-            ;
+        while ((left.isBusy() || right.isBusy()) && opMode.opModeIsActive());
 
-        leftBack.setPower(0);
-        leftFront.setPower(0);
-        rightBack.setPower(0);
-        rightFront.setPower(0);
+        left.setPower(0);
+        right.setPower(0);
 
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void gyroTurn(int degrees) {
@@ -108,19 +93,13 @@ public class Robot {
         while (gyro.isCalibrating()) ;
         if (degrees <= 180) {
             while (gyro.getHeading() < degrees + 2 && gyro.getHeading() > degrees - 2) {
-                leftFront.setPower(0.25);
-                leftBack.setPower(0.25);
-
-                rightFront.setPower(-0.25);
-                rightBack.setPower(-0.25);
+                left.setPower(0.25);
+                right.setPower(-0.25);
             }
         } else {
             while (gyro.getHeading() < degrees + 2 && gyro.getHeading() > degrees - 2) {
-                leftFront.setPower(-0.25);
-                leftBack.setPower(-0.25);
-
-                rightFront.setPower(0.25);
-                rightBack.setPower(0.25);
+                left.setPower(-0.25);
+                right.setPower(0.25);
             }
         }
 

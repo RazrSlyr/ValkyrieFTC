@@ -20,13 +20,11 @@ public class TeleTest extends OpMode {
         double ry = -gamepad1.right_stick_y;
 
 
-        //connecting left stick to the left motors
-        robot.leftBack.setPower(ly);
-        robot.leftFront.setPower(ly);
+        //connecting left stick to the left motor
+        robot.left.setPower(ly);
 
-        //connecting right stick to the left motors
-        robot.rightBack.setPower(ry);
-        robot.rightFront.setPower(ry);
+        //connecting right stick to the right motor
+        robot.right.setPower(ry);
 
 
     }
