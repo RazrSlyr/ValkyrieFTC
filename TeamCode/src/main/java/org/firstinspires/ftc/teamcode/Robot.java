@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.GyroSensor;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.*;
 
 import java.sql.Time;
 import java.util.Timer;
@@ -24,8 +21,9 @@ public class Robot {
 
      */
 
-    private double NUM_TICKS = 500;
-    private double CIRCUMFERENCE = 6.0 * Math.PI;
+    private double NUM_TICKS = 100 * 5 / 3.25 * 5 / 6 * 5 / 3 * 10 / 9;
+    private double NINETY_DEG = 0;
+    private double CIRCUMFERENCE = 3.14961 * Math.PI;
 
     public DcMotor left;
     public DcMotor right;
@@ -43,26 +41,28 @@ public class Robot {
 
     public Servo hook;
 
+    public ColorSensor color;
 
     public void initialize(OpMode opMode) {
         left = opMode.hardwareMap.dcMotor.get("left");
         right = opMode.hardwareMap.dcMotor.get("right");
+        right.setDirection(DcMotorSimple.Direction.REVERSE);
 
-
-        cSensor = opMode.hardwareMap.colorSensor.get("cSensor");
-
-        intake = opMode.hardwareMap.dcMotor.get("intakeArm");
-
+//
+//        cSensor = opMode.hardwareMap.colorSensor.get("cSensor");
+//
+//        intake = opMode.hardwareMap.dcMotor.get("intakeArm");
+//
         climber = opMode.hardwareMap.dcMotor.get("climber");
-
-        gyro = opMode.hardwareMap.gyroSensor.get("gyro");
-
-        arm = opMode.hardwareMap.dcMotor.get("arm");
-
-        hook = opMode.hardwareMap.servo.get("hook");
+//
+//        gyro = opMode.hardwareMap.gyroSensor.get("gyro");
+//
+//        arm = opMode.hardwareMap.dcMotor.get("arm");
+//
+//        hook = opMode.hardwareMap.servo.get("hook");
     }
 
-    public void encoderDrive(double inches, LinearOpMode opMode) {
+    public void encoderDrive(double inches, LinearOpMode opMode, double power) {
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -74,10 +74,14 @@ public class Robot {
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        left.setPower(.25);
-        right.setPower(.25);
+        left.setPower(power * 0.8);
+        right.setPower(power);
 
-        while ((left.isBusy() || right.isBusy()) && opMode.opModeIsActive());
+        while ((left.isBusy() && right.isBusy()) && opMode.opModeIsActive()) {
+            opMode.telemetry.addData("Left Distance Remaining: ", left.getTargetPosition() - left.getCurrentPosition());
+            opMode.telemetry.addData("Right Distance Remaining:", right.getTargetPosition() - right.getCurrentPosition());
+            opMode.telemetry.update();
+        };
 
         left.setPower(0);
         right.setPower(0);
@@ -111,6 +115,37 @@ public class Robot {
         double tiempo = System.currentTimeMillis();
         while (System.currentTimeMillis() - tiempo < time * 1000) ;
         intake.setPower(0);
+    }
+
+    public void encoderTurn(double angle, double speed, LinearOpMode op) {
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        double newAng = (Math.abs(angle) / 90) * NINETY_DEG;
+
+        int distance = (int) ((newAng / CIRCUMFERENCE) * NUM_TICKS);
+        if(angle < 0) {
+            left.setTargetPosition(-distance / 2 * 80/90 * 90/88 * 90/100);
+            right.setTargetPosition(distance);
+        } else {
+            left.setTargetPosition(distance);
+            right.setTargetPosition(-distance);
+        }
+
+
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setPower(speed);
+        right.setPower(speed);
+
+        while(left.isBusy() || right.isBusy() && op.opModeIsActive());
+
+        left.setPower(0);
+        right.setPower(0);
+
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
     }
     /*
     public void climberMove(double dPR, double max) {

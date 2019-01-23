@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     android:id="@+id/top_bar"
     android:layout_width="fill_parent"
     android:layout_height="80dp"
-    android:background="@color/background_black">
+    android:background="#1c2b7b">
 
     <ImageView
       android:id="@+id/robotIcon"
