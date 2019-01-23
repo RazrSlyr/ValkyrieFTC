@@ -22,7 +22,7 @@ public class Robot {
      */
 
     private double NUM_TICKS = 100 * 5 / 3.25 * 5 / 6 * 5 / 3 * 10 / 9;
-    private double NINETY_DEG = 0;
+    private double NINETY_DEG = 10;
     private double CIRCUMFERENCE = 3.14961 * Math.PI;
 
     public DcMotor left;
@@ -74,7 +74,7 @@ public class Robot {
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        left.setPower(power * 0.8);
+        left.setPower(power * 0.97);
         right.setPower(power);
 
         while ((left.isBusy() && right.isBusy()) && opMode.opModeIsActive()) {
@@ -122,7 +122,6 @@ public class Robot {
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         double newAng = (Math.abs(angle) / 90) * NINETY_DEG;
-
         int distance = (int) ((newAng / CIRCUMFERENCE) * NUM_TICKS);
         if(angle < 0) {
             left.setTargetPosition(-distance / 2 * 80/90 * 90/88 * 90/100);

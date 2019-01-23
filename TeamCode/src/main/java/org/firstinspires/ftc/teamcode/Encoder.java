@@ -10,7 +10,7 @@ public class Encoder extends LinearOpMode {
         robot.initialize(this);
         waitForStart();
         while (opModeIsActive()) {
-            robot.encoderDrive(10, this, 0.125);
+            robot.encoderDrive(25, this, 0.125);
             stop();
         }
     }
